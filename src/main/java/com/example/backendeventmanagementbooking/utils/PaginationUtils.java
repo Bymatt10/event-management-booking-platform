@@ -49,6 +49,7 @@ public class PaginationUtils {
 
     @Data
     @AllArgsConstructor
+    @Builder
     public static class PaginationDto<T> {
         private List<T> value;
         private Integer currentPage;

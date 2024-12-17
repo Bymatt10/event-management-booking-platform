@@ -21,4 +21,5 @@ public interface EventRepository extends JpaRepository<EventEntity, UUID> {
 
 
     EventEntity findEventByUuidAndAccessTypeAndStartDateAfter(UUID eventUuid, EventAccessType accessType, Date startDate);
+
 }

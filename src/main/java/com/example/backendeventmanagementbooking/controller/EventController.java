@@ -1,7 +1,6 @@
 package com.example.backendeventmanagementbooking.controller;
 
-import com.example.backendeventmanagementbooking.domain.dto.request.EventDto;
-import com.example.backendeventmanagementbooking.domain.dto.request.EventUpdatedDto;
+import com.example.backendeventmanagementbooking.domain.dto.request.*;
 import com.example.backendeventmanagementbooking.domain.dto.response.EventGuestDto;
 import com.example.backendeventmanagementbooking.domain.dto.response.EventResponseDto;
 import com.example.backendeventmanagementbooking.service.EventGuestService;
@@ -59,7 +58,7 @@ public class EventController {
     }
 
     @PostMapping("guest/subscribe/public/{eventUuid}")
-    public ResponseEntity<GenericResponse<EventGuestDto>> subscribeToPublicEvent(@PathVariable UUID eventUuid) {
+    public ResponseEntity<GenericResponse<EventGuestDto>> subscribeToPublicEvent(@PathVariable UUID eventUuid) throws MessagingException, IOException {
         return eventGuestService.subscribeToPublicEvent(eventUuid).GenerateResponse();
     }
 
@@ -69,12 +68,37 @@ public class EventController {
     }
 
     @PostMapping("guest/subscribe/private")
-    public ResponseEntity<GenericResponse<EventGuestDto>> subscribeToPrivateEvent(@RequestParam String securityCode) {
+    public ResponseEntity<GenericResponse<EventGuestDto>> subscribeToPrivateEvent(@RequestParam String securityCode) throws MessagingException, IOException {
         return eventGuestService.subscribeToPrivateEvent(securityCode).GenerateResponse();
     }
 
     @PutMapping("guest/unsubscribe/private")
     public ResponseEntity<GenericResponse<Void>> unsubscribeFromPrivateEvent(@RequestParam UUID eventUuid) {
         return eventGuestService.unsubscribeFromPrivateEvent(eventUuid).GenerateResponse();
+    }
+
+    @GetMapping("list/event/subscribe")
+    public ResponseEntity<GenericResponse<PaginationUtils.PaginationDto<EventResponseDto>>> listAllMyEventSubscriptions(@RequestParam(defaultValue = "3") int size, @RequestParam(defaultValue = "0") int page) {
+        return eventGuestService.listAllMyEventSubscriptions(PageRequest.of(page, size));
+    }
+
+    @PutMapping("guest/changeDate")
+    public ResponseEntity<GenericResponse<EventDto>> changeDate(@RequestParam UUID eventUuid, UpdateDateDto updateDate) {
+        return eventService.changeDate(eventUuid, updateDate).GenerateResponse();
+    }
+
+    @PutMapping("guest/changeLocation")
+    public ResponseEntity<GenericResponse<EventDto>> changeLocation(@RequestParam UUID eventUuid, UpdatedLocationDto updatedLocationDto) {
+        return eventService.changeLocation(eventUuid, updatedLocationDto).GenerateResponse();
+    }
+
+    @PutMapping("guest/changePrice")
+    public ResponseEntity<GenericResponse<EventDto>> changePrice(@RequestParam UUID eventUuid, EventUpdatedDto eventUpdatedDto) {
+        return eventService.changePrice(eventUuid, eventUpdatedDto).GenerateResponse();
+    }
+
+    @PutMapping("guest/changeCapacity")
+    public ResponseEntity<GenericResponse<EventDto>> changeCapacity(@RequestParam UUID eventUuid, UpdateCapacityDto updateCapacityDto) {
+        return eventService.changeCapacity(eventUuid, updateCapacityDto).GenerateResponse();
     }
 }

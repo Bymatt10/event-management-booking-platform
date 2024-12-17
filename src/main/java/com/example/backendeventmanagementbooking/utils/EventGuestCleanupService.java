@@ -16,7 +16,7 @@ public class EventGuestCleanupService {
 
     private final EventGuestRepository eventGuestRepository;
 
-    @Scheduled(fixedRate = 30000)
+//    @Scheduled(fixedRate = 30000)
     @Transactional
     public void cleanUpOldPendingInvitations() {
         var cutoffTime = LocalDateTime.now().minusMinutes(50);
